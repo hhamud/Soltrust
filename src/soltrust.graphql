@@ -1,0 +1,199 @@
+schema {
+    query: RootSchemaQuery
+}
+directive @filter(
+    """Name of the filter operation to perform."""
+    op: String!
+    """List of string operands for the operator."""
+    value: [String!]
+) on FIELD | INLINE_FRAGMENT
+directive @tag(
+    """Name to apply to the given property field."""
+    name: String
+) on FIELD
+directive @output(
+    """What to designate the output field generated from this property field."""
+    name: String
+) on FIELD
+directive @optional on FIELD
+directive @recurse(
+    """
+    Recurse up to this many times on this edge. A depth of 1 produces the current
+    vertex and its immediate neighbors along the given edge.
+    """
+    depth: Int!
+) on FIELD
+directive @fold on FIELD
+directive @transform(
+    """
+    Name of the transformation operation to perform.
+    """
+    op: String!
+) on FIELD
+
+type RootSchemaQuery {
+  contract: [Contract]
+}
+
+type Contract {
+  name: String!
+  members: [ContractMember!]
+}
+
+type ContractMember {
+  __typename: String!
+  # Only one of the following fields will be non-null:
+  function: FunctionDefinition
+  event: EventDefinition
+  state_variable: StateVariableDeclaration
+}
+
+type FunctionDefinition {
+  name: String!
+  parameters: [Parameter!]
+  return_parameters: [Parameter!]
+  visibility: Visibility!
+  mutability: Mutability!
+  body: [Statement!]
+}
+
+type EventDefinition {
+  name: String!
+  parameters: [Parameter!]
+}
+
+type StateVariableDeclaration {
+  name: String!
+  type: Type!
+  visibility: Visibility!
+}
+
+type Parameter {
+  name: String!
+  type: Type!
+}
+
+type Type {
+  __typename: String!
+  # Only one of the following fields will be non-null:
+  elementary_type: ElementaryType
+  array_type: ArrayType
+  user_defined_type: UserDefinedType
+}
+
+type ElementaryType {
+  name: String!
+}
+
+type ArrayType {
+  element_type: Type!
+}
+
+type UserDefinedType {
+  name: String!
+}
+
+type Statement {
+  __typename: String!
+  # Only one of the following fields will be non-null:
+  expression: Expression
+  variable_declaration: VariableDeclaration
+  if: IfStatement
+  while: WhileStatement
+  for: ForStatement
+  block: Block
+  return: ReturnStatement
+}
+
+type Expression {
+  __typename: String!
+  # Only one of the following fields will be non-null:
+  binary_operation: BinaryOperation
+  unary_operation: UnaryOperation
+  literal: Literal
+  function_call: FunctionCall
+  member_access: MemberAccess
+  array_access: ArrayAccess
+  variable: Variable
+}
+
+type BinaryOperation {
+  left: Expression!
+  operator: String!
+  right: Expression!
+}
+
+type UnaryOperation {
+  operator: String!
+  operand: Expression!
+}
+
+type Literal {
+  value: String!
+  type: Type!
+}
+
+type FunctionCall {
+  function: Expression!
+  arguments: [Expression!]!
+}
+
+type MemberAccess {
+  object: Expression!
+  member_name: String!
+}
+
+type ArrayAccess {
+  array: Expression!
+  index: Expression!
+}
+
+type Variable {
+  name: String!
+}
+
+type VariableDeclaration {
+  name: String!
+  type: Type!
+  value: Expression
+}
+
+type IfStatement {
+  condition: Expression!
+  true_branch: [Statement!]
+  false_branch: [Statement!]
+}
+
+type WhileStatement {
+  condition: Expression!
+  body: [Statement!]
+}
+
+type ForStatement {
+  initialization: Statement!
+  condition: Expression!
+  update: Expression!
+  body: [Statement!]
+}
+
+type Block {
+  statements: [Statement!]
+}
+
+type ReturnStatement {
+  value: Expression
+}
+
+enum Visibility {
+  PUBLIC
+  INTERNAL
+  PRIVATE
+  EXTERNAL
+}
+
+enum Mutability {
+  VIEW
+  PURE
+  PAYABLE
+  NONPAYABLE
+}
