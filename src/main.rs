@@ -1,6 +1,5 @@
 mod adapter;
-mod utils;
-mod ast;
+mod parser;
 
 fn main() {
     println!("Coming soon");
