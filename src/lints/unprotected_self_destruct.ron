@@ -1,0 +1,22 @@
+InputQuery{
+    contracts {
+        functiondefinition {
+            body  {
+                function_call {
+                    function @filter(op: "=", value: ["$self_destruct"]) @output
+                    modifier @filter(op: "None")
+                    visibility {
+                        public @filter(op: "=", value: ["$public"]) @output
+                        external @filter(op: "=", value: ["$external"]) @output
+                        }
+                }
+            }
+        }
+    }
+}
+
+arguments: {
+  "self_destruct": "selfdestruct",
+  "public": "public",
+  "external": "external",
+}

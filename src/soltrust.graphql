@@ -39,13 +39,13 @@ directive @transform(
 ) on FIELD
 
 type RootSchemaQuery {
-  contract: [Contract]
+  contracts: [Contract]!
+  contract(name: String!): Contract!
 }
 
 type Pragma {
-  version: String!,
-  op: String!,
-
+  version: [String]!,
+  op: [String]!,
 }
 
 type Contract {
@@ -55,9 +55,9 @@ type Contract {
 }
 
 type ContractMember {
-  __typename: String!
+  typename: String!
   # Only one of the following fields will be non-null:
-  function: FunctionDefinition
+  function: [FunctionDefinition]!
   event: EventDefinition
   state_variable: StateVariableDeclaration
 }
@@ -68,6 +68,7 @@ type FunctionDefinition {
   return_parameters: [Parameter!]
   visibility: Visibility!
   mutability: Mutability!
+  modifier: [Modifier],
   body: [Statement!]
 }
 
@@ -88,7 +89,7 @@ type Parameter {
 }
 
 type Type {
-  __typename: String!
+  typename: String!
   # Only one of the following fields will be non-null:
   elementary_type: ElementaryType
   array_type: ArrayType
@@ -108,7 +109,7 @@ type UserDefinedType {
 }
 
 type Statement {
-  __typename: String!
+  typename: String!
   # Only one of the following fields will be non-null:
   expression: Expression
   variable_declaration: VariableDeclaration
@@ -120,7 +121,7 @@ type Statement {
 }
 
 type Expression {
-  __typename: String!
+  typename: String!
   # Only one of the following fields will be non-null:
   binary_operation: BinaryOperation
   unary_operation: UnaryOperation
@@ -129,6 +130,14 @@ type Expression {
   member_access: MemberAccess
   array_access: ArrayAccess
   variable: Variable
+  operator: Operator,
+}
+
+type Operator {
+     add: String,
+     subtract: String,
+     divide: String,
+     multiply: String
 }
 
 type BinaryOperation {
@@ -198,16 +207,22 @@ type ReturnStatement {
   value: Expression
 }
 
-enum Visibility {
-  PUBLIC
-  INTERNAL
-  PRIVATE
-  EXTERNAL
+type Visibility {
+     public: String,
+     internal: String,
+     private: String,
+     external: String
 }
 
-enum Mutability {
-  VIEW
-  PURE
-  PAYABLE
-  NONPAYABLE
+type Mutability {
+     view: String,
+     pure: String,
+     payable: String,
+     nonpayable: String
+
+}
+
+type Modifier {
+  name: String!,
+  function_call: FunctionCall
 }

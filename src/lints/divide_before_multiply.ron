@@ -1,0 +1,23 @@
+InputQuery{
+    contracts {
+        functiondefinition {
+            body  {
+                statement {
+                    expression {
+                        operator @filter(op: "=", value: ["$multiply"]) @output
+                        index @tag @output
+                    }
+                    expression {
+                        operator @filter(op: "=", value: ["$divide"]) @output
+                        index @filter(op: ">", value: ["%index"]) @output
+                    }
+                }
+            }
+        }
+    }
+}
+
+arguments: {
+  "multiply": "*",
+  "divide": "/"
+}

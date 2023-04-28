@@ -1,11 +1,7 @@
 # Soltrust
 
-
 ## Introduction
 A Trustfall adapter for solidity
-
-
-
 
 ## Installation
 
@@ -13,4 +9,3 @@ A Trustfall adapter for solidity
 cargo install --git https://github.com/hhamud/soltrust
 ```
 
-`

@@ -1,0 +1,16 @@
+# Detects floating pragma in solidity compiler versions
+# e.g  pragma solidity ^0.6.0
+# e.g  pragma solidity >= 0.4.0 < 0.6.0
+InputQuery {
+           Contracts {
+                pragma {
+                    op @filter(op: "and", value: [["$float1"], ["$float2"])
+                    version @output
+                        }
+
+                    }
+            }
+arguments: {
+  "float1": "^"
+  "float2": ">="
+}
