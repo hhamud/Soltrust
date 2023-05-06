@@ -1,6 +1,5 @@
 # Soltrust
 
-## Introduction
 A Trustfall adapter for solidity
 
 ## Installation

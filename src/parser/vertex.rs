@@ -3,9 +3,9 @@ use super::ast::{
     Target,
 };
 use solang_parser::pt;
-use trustfall::provider::Typename;
 
-#[derive(PartialEq, Clone, Debug,Typename)]
+
+#[derive(PartialEq, Clone, Debug, TrustfallEnumVertex)]
 pub enum Vertex {
     Statement(pt::Statement),
     Expression(pt::Expression),
@@ -55,18 +55,6 @@ impl Into<Vertex> for pt::SourceUnit {
     }
 }
 
-// TODO: expand typename for each and every enum
-impl Typename for Vertex {
-    fn typename(&self) -> &'static str {
-        match self {
-            Self::Expression(..) => "Expression",
-            Self::Statement(..) => "Statement",
-            Self::SourceUnit(..) => "Source_unit",
-            Self::SourceUnitPart(..) => "Source_unit_part",
-            Self::ContractPart(..) => "Contract_part",
-        }
-    }
-}
 
 impl Vertex {
     pub fn as_target(&self) -> Target {

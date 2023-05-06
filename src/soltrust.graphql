@@ -44,8 +44,8 @@ type RootSchemaQuery {
 }
 
 type Pragma {
-  version: [String]!,
-  op: [String]!,
+  version: [String]!
+  op: [String]!
 }
 
 type Contract {
@@ -53,6 +53,7 @@ type Contract {
   members: [ContractMember!]
   pragma: Pragma!
 }
+
 
 type ContractMember {
   typename: String!

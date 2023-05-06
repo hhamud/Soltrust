@@ -3,26 +3,46 @@ use trustfall::{
     provider::{
         BasicAdapter, ContextIterator, ContextOutcomeIterator, EdgeParameters, VertexIterator,
     },
-    FieldValue,
+    FieldValue, Schema
 };
 
 use crate::parser::vertex::Vertex;
+use crate::util::read_file;
 
 #[derive(Debug, Clone, Default)]
 pub struct Soltrust {
     data: HashSet<String>,
 }
 
+impl Soltrust {
+    pub fn new() -> Self {
+        Self {
+            data: HashSet::new()
+        }
+    }
+
+    pub fn schema(&self) -> Schema {
+        Schema::parse(read_file("./soltrust.graphql")).expect("valid schema")
+    }
+}
+
 impl BasicAdapter<'static> for Soltrust {
     type Vertex = Vertex;
 
-    // Required methods
     fn resolve_starting_vertices(
         &mut self,
         edge_name: &str,
         parameters: &EdgeParameters,
     ) -> VertexIterator<'static, Self::Vertex> {
-        todo!()
+        // get data points
+        match edge_name.as_ref() {
+            "Contracts" => Box::new(std::iter::once()),
+            "Contract" => {
+                let name = parameters["name"].as_str().unwrap();
+                Box::new(std::iter::once()),
+            }
+            _ => unreachable!("resolve starting vertixes {edge_name}")
+        }
     }
 
     fn resolve_property(

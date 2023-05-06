@@ -1,4 +1,4 @@
-InputQuery{
+InputQuery {
     contracts {
         functiondefinition {
             body  {
@@ -8,7 +8,7 @@ InputQuery{
                     visibility {
                         public @filter(op: "=", value: ["$public"]) @output
                         external @filter(op: "=", value: ["$external"]) @output
-                        }
+                                    }
                 }
             }
         }
@@ -20,3 +20,4 @@ arguments: {
   "public": "public",
   "external": "external",
 }
+
