@@ -1,24 +1,33 @@
-use std::collections::HashSet;
 use trustfall::{
     provider::{
         BasicAdapter, ContextIterator, ContextOutcomeIterator, EdgeParameters, VertexIterator,
     },
-    FieldValue, Schema
+    FieldValue, Schema,
 };
 
-use crate::parser::vertex::Vertex;
 use crate::util::read_file;
+use crate::vertex::Vertex;
+use serde_json;
+use solc_ast::ast::SourceUnit;
+use std::{error::Error, fs::File, io::BufReader};
 
 #[derive(Debug, Clone, Default)]
 pub struct Soltrust {
-    data: HashSet<String>,
+    data: Vec<Vertex>,
+}
+
+pub fn read_json(path: &str) -> Result<SourceUnit, Box<dyn Error>> {
+    let file = File::open(path)?;
+    let mut reader = BufReader::new(file);
+    serde_json::from_reader(&mut reader).map_err(|e| e.into())
 }
 
 impl Soltrust {
-    pub fn new() -> Self {
-        Self {
-            data: HashSet::new()
-        }
+    pub fn new(path: &str) -> Self {
+        // parse solc ast json file
+        let content: SourceUnit = read_json(path).unwrap();
+
+        Self { data: Vec::new() }
     }
 
     pub fn schema(&self) -> Schema {
@@ -36,12 +45,14 @@ impl BasicAdapter<'static> for Soltrust {
     ) -> VertexIterator<'static, Self::Vertex> {
         // get data points
         match edge_name.as_ref() {
-            "Contracts" => Box::new(std::iter::once()),
+            "Contracts" => todo!(),
             "Contract" => {
                 let name = parameters["name"].as_str().unwrap();
-                Box::new(std::iter::once()),
+                todo!()
+                //self.data
+                //Box::new(std::iter::once(Vertex::ContractPart())),
             }
-            _ => unreachable!("resolve starting vertixes {edge_name}")
+            _ => unreachable!("resolve starting vertixes {edge_name}"),
         }
     }
 

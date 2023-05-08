@@ -1,16 +1,14 @@
-use std::cell::RefCell;
 use clap::Parser;
-use trustfall::{execute_query, FieldValue, TransparentValue};
+use serde::Deserialize;
+use std::cell::RefCell;
 use std::collections::BTreeMap;
 use std::rc::Rc;
 use std::sync::Arc;
-use serde::Deserialize;
-
+use trustfall::{execute_query, FieldValue, TransparentValue};
 
 mod adapter;
-mod parser;
 mod util;
-
+mod vertex;
 
 use crate::adapter::Soltrust;
 
@@ -24,10 +22,8 @@ struct InputQuery<'a> {
 #[derive(Debug, Parser)]
 struct Args {
     #[arg(short, long)]
-    all: bool
+    all: bool,
 }
-
-
 
 fn run_query(path: &str, max_results: Option<usize>) {
     let content = util::read_file(path);
@@ -60,6 +56,6 @@ fn main() {
     let args = Args::parse();
 
     if args.all {
-       run_query("./lints/divide_before_multiply.ron", None);
+        run_query("./lints/divide_before_multiply.ron", None);
     }
 }
