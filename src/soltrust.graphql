@@ -43,20 +43,26 @@ type RootSchemaQuery {
   contract(name: String!): Contract!
 }
 
+
 type Pragma {
-  version: [String]!
-  op: [String]!
+  literals: [String!]!
+  src: String,
 }
 
 type Contract {
   name: String!
   members: [ContractMember!]
   pragma: Pragma!
+  import: Import
 }
 
+type Import {
+file: String!
+unit_alias: String!
+}
 
 type ContractMember {
-  typename: String!
+  name: String!
   # Only one of the following fields will be non-null:
   function: [FunctionDefinition]!
   event: EventDefinition
@@ -85,44 +91,23 @@ type StateVariableDeclaration {
 }
 
 type Parameter {
-  name: String!
-  type: Type!
+  name: String!,
+  _type: String!
 }
 
-type Type {
-  typename: String!
-  # Only one of the following fields will be non-null:
-  elementary_type: ElementaryType
-  array_type: ArrayType
-  user_defined_type: UserDefinedType
-}
 
-type ElementaryType {
-  name: String!
-}
-
-type ArrayType {
-  element_type: Type!
-}
-
-type UserDefinedType {
-  name: String!
-}
 
 type Statement {
-  typename: String!
   # Only one of the following fields will be non-null:
   expression: Expression
   variable_declaration: VariableDeclaration
   if: IfStatement
   while: WhileStatement
   for: ForStatement
-  block: Block
-  return: ReturnStatement
+  return: Expression
 }
 
 type Expression {
-  typename: String!
   # Only one of the following fields will be non-null:
   binary_operation: BinaryOperation
   unary_operation: UnaryOperation
@@ -130,7 +115,7 @@ type Expression {
   function_call: FunctionCall
   member_access: MemberAccess
   array_access: ArrayAccess
-  variable: Variable
+  variable: String,
   operator: Operator,
 }
 
@@ -172,9 +157,6 @@ type ArrayAccess {
   index: Expression!
 }
 
-type Variable {
-  name: String!
-}
 
 type VariableDeclaration {
   name: String!
@@ -200,13 +182,6 @@ type ForStatement {
   body: [Statement!]
 }
 
-type Block {
-  statements: [Statement!]
-}
-
-type ReturnStatement {
-  value: Expression
-}
 
 type Visibility {
      public: String,
